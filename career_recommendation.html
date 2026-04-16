@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Career Recommendation System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0d1b2a;
+      --teal: #1b9aaa;
+      --gold: #f4c542;
+      --cream: #fdf6ec;
+      --light-gray: #f0f4f8;
+      --text: #1a1a2e;
+      --muted: #6b7280;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      background: var(--navy);
+      padding: 18px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--gold);
+      letter-spacing: 1px;
+    }
+
+    .logo span { color: #fff; }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 36px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #cdd6f4;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      transition: color 0.2s;
+    }
+
+    nav ul li a:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--navy);
+      color: #fff;
+      padding: 100px 60px 80px;
+      display: flex;
+      align-items: center;
+      gap: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      right: -80px;
+      top: -80px;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(27,154,170,0.25) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .hero-text { max-width: 600px; z-index: 1; }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(244,197,66,0.15);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.2rem;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 span { color: var(--teal); }
+
+    .hero p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #b8c0cc;
+      max-width: 500px;
+      margin-bottom: 36px;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--navy);
+      border: none;
+      padding: 14px 32px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .btn-primary:hover { background: #e6b830; transform: translateY(-2px); }
+
+    .btn-outline {
+      background: transparent;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 14px 28px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin-left: 14px;
+      transition: border-color 0.2s;
+    }
+
+    .btn-outline:hover { border-color: #fff; }
+
+    .hero-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 36px 28px;
+      min-width: 260px;
+      text-align: center;
+      z-index: 1;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-card .big-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: var(--gold);
+    }
+
+    .hero-card p { color: #9ba8b7; font-size: 0.9rem; margin-top: 6px; }
+
+    .hero-card hr { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 20px 0; }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      background: var(--teal);
+      display: flex;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .stat-item {
+      padding: 24px 60px;
+      text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .stat-item:last-child { border-right: none; }
+
+    .stat-item .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: #fff;
+      display: block;
+    }
+
+    .stat-item span:last-child { font-size: 0.8rem; color: rgba(255,255,255,0.8); }
+
+    /* ── HOW IT WORKS ── */
+    .section { padding: 80px 60px; }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--teal);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 500px;
+      line-height: 1.7;
+      margin-bottom: 50px;
+    }
+
+    .steps {
+      display: flex;
+      gap: 30px;
+    }
+
+    .step-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 36px 28px;
+      flex: 1;
+      border-top: 4px solid var(--teal);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .step-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+
+    .step-num {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: var(--gold);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .step-card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .step-card p { color: var(--muted); font-size: 0.92rem; line-height: 1.7; }
+
+    /* ── CAREER QUIZ FORM ── */
+    .quiz-section {
+      background: var(--light-gray);
+      padding: 80px 60px;
+    }
+
+    .quiz-box {
+      background: #fff;
+      border-radius: 20px;
+      padding: 50px;
+      max-width: 800px;
+      margin: 0 auto;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+    }
+
+    .quiz-box .section-title { font-size: 1.8rem; margin-bottom: 8px; }
+    .quiz-box .section-sub { margin-bottom: 36px; }
+
+    .form-group { margin-bottom: 24px; }
+
+    .form-group label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid #dde3ef;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text);
+      background: #fafafa;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--teal);
+      background: #fff;
+    }
+
+    .form-row { display: flex; gap: 20px; }
+    .form-row .form-group { flex: 1; }
+
+    .interest-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .tag {
+      padding: 8px 18px;
+      border: 1.5px solid #dde3ef;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #fafafa;
+    }
+
+    .tag:hover, .tag.active {
+      background: var(--navy);
+      color: #fff;
+      border-color: var(--navy);
+    }
+
+    .submit-btn {
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      padding: 16px 40px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      transition: background 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .submit-btn:hover { background: var(--teal); }
+
+    /* ── CAREER CARDS ── */
+    .careers-section { background: var(--cream); padding: 80px 60px; }
+
+    .careers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .career-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.05);
+      border-left: 5px solid var(--teal);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .career-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(0,0,0,0.1); }
+
+    .career-icon {
+      font-size: 2rem;
+      margin-bottom: 6px;
+    }
+
+    .career-card h3 { font-size: 1.05rem; font-weight: 700; }
+
+    .career-card p { color: var(--muted); font-size: 0.88rem; line-height: 1.6; }
+
+    .career-tag {
+      display: inline-block;
+      background: var(--light-gray);
+      color: var(--teal);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 12px;
+      margin-top: 4px;
+    }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials { background: var(--navy); padding: 80px 60px; }
+
+    .testimonials .section-title { color: #fff; }
+    .testimonials .section-sub { color: #9ba8b7; }
+
+    .testi-grid { display: flex; gap: 24px; }
+
+    .testi-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 30px;
+      flex: 1;
+    }
+
+    .testi-card p { color: #cdd6f4; font-size: 0.95rem; line-height: 1.8; margin-bottom: 20px; }
+
+    .testi-author { display: flex; align-items: center; gap: 14px; }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--teal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    .testi-author .name { font-weight: 600; color: #fff; font-size: 0.9rem; }
+    .testi-author .role { color: var(--gold); font-size: 0.8rem; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #060e18;
+      color: #9ba8b7;
+      text-align: center;
+      padding: 30px 60px;
+      font-size: 0.88rem;
+    }
+
+    footer strong { color: var(--gold); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      nav ul { gap: 18px; }
+      .hero { flex-direction: column; padding: 60px 24px; }
+      .hero h1 { font-size: 2.2rem; }
+      .steps { flex-direction: column; }
+      .careers-grid { grid-template-columns: 1fr 1fr; }
+      .testi-grid { flex-direction: column; }
+      .stats-bar { flex-direction: column; }
+      .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.2); }
+      .section, .quiz-section, .careers-section, .testimonials { padding: 50px 24px; }
+      .form-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">Career<span>Guide</span></div>
+  <ul>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#quiz">Take Quiz</a></li>
+    <li><a href="#careers">Careers</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-badge">🎓 For High School Students</div>
+    <h1>Find Your <span>Perfect Career</span> Path Today</h1>
+    <p>Confused about what to do after school? Answer a few simple questions and our system will suggest the best career options based on your interests, skills, and academic performance.</p>
+    <a href="#quiz" class="btn-primary">Start Career Quiz</a>
+    <a href="#careers" class="btn-outline">Explore Careers</a>
+  </div>
+  <div class="hero-card">
+    <div class="big-num">50+</div>
+    <p>Career Paths Available</p>
+    <hr/>
+    <div class="big-num">3</div>
+    <p>Simple Steps to Find Your Career</p>
+    <hr/>
+    <div class="big-num">Free</div>
+    <p>No Cost. No Signup Needed.</p>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <span class="num">10,000+</span>
+    <span>Students Guided</span>
+  </div>
+  <div class="stat-item">
+    <span class="num">50+</span>
+    <span>Career Fields</span>
+  </div>
+  <div class="stat-item">
+    <span class="num">98%</span>
+    <span>Satisfaction Rate</span>
+  </div>
+  <div class="stat-item">
+    <span class="num">Free</span>
+    <span>Forever</span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how">
+  <div class="section-label">Process</div>
+  <div class="section-title">How It Works</div>
+  <div class="section-sub">Three easy steps to discover the career that matches who you are.</div>
+  <div class="steps">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <h3>Tell Us About Yourself</h3>
+      <p>Fill in your name, class, subjects, and favourite activities. It only takes 2 minutes.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <h3>Answer Interest Questions</h3>
+      <p>Select topics you enjoy — Science, Arts, Commerce, Sports, Technology, and more.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <h3>Get Career Recommendations</h3>
+      <p>Receive a personalised list of career options that match your skills and interests.</p>
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ FORM -->
+<section class="quiz-section" id="quiz">
+  <div class="quiz-box">
+    <div class="section-label">Career Quiz</div>
+    <div class="section-title">Discover Your Career</div>
+    <div class="section-sub">Answer the questions below honestly. There are no right or wrong answers!</div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" placeholder="e.g. Rahul Sharma"/>
+      </div>
+      <div class="form-group">
+        <label>Current Class / Grade</label>
+        <select>
+          <option value="">Select Class</option>
+          <option>Class 9</option>
+          <option>Class 10</option>
+          <option>Class 11</option>
+          <option>Class 12</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Stream / Subject Group</label>
+        <select>
+          <option value="">Select Stream</option>
+          <option>Science (PCM)</option>
+          <option>Science (PCB)</option>
+          <option>Commerce</option>
+          <option>Arts / Humanities</option>
+          <option>Vocational</option>
+          <option>Not Decided Yet</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Average Marks / Percentage</label>
+        <input type="text" placeholder="e.g. 75%"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Your Favourite Subject</label>
+      <input type="text" placeholder="e.g. Mathematics, Biology, History..."/>
+    </div>
+
+    <div class="form-group">
+      <label>Select Your Interests (choose all that apply)</label>
+      <div class="interest-tags">
+        <div class="tag" onclick="this.classList.toggle('active')">💻 Technology</div>
+        <div class="tag" onclick="this.classList.toggle('active')">🎨 Arts & Design</div>
+        <div class="tag" onclick="this.classList.toggle('active')">🔬 Science & Research</div>
+        <div class="tag" onclick="this.classList.toggle('active')">💰 Business & Finance</div>
+        <div class="tag" onclick="this.classList.toggle('active')">⚕️ Medicine & Health</div>
+        <div class="tag" onclick="this.classList.toggle('active')">📚 Teaching</div>
+        <div class="tag" onclick="this.classList.toggle('active')">⚖️ Law</div>
+        <div class="tag" onclick="this.classList.toggle('active')">🏗️ Engineering</div>
+        <div class="tag" onclick="this.classList.toggle('active')">🎬 Media & Films</div>
+        <div class="tag" onclick="this.classList.toggle('active')">🌿 Agriculture</div>
+        <div class="tag" onclick="this.classList.toggle('active')">✈️ Travel & Tourism</div>
+        <div class="tag" onclick="this.classList.toggle('active')">⚽ Sports</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>What do you enjoy doing in your free time?</label>
+      <textarea rows="3" placeholder="e.g. Coding, drawing, reading, playing sports, helping people..."></textarea>
+    </div>
+
+    <button class="submit-btn">🔍 Get My Career Recommendations</button>
+  </div>
+</section>
+
+<!-- CAREER OPTIONS -->
+<section class="careers-section" id="careers">
+  <div class="section-label">Explore</div>
+  <div class="section-title">Popular Career Paths</div>
+  <div class="section-sub">Here are some popular careers students often discover through our system.</div>
+  <div class="careers-grid">
+    <div class="career-card">
+      <div class="career-icon">💻</div>
+      <h3>Software Engineer</h3>
+      <p>Build apps, websites, and software. Great for students who love logic, maths, and computers.</p>
+      <span class="career-tag">Science / PCM</span>
+    </div>
+    <div class="career-card">
+      <div class="career-icon">⚕️</div>
+      <h3>Doctor / Physician</h3>
+      <p>Diagnose and treat patients. Best for students who are passionate about biology and helping others.</p>
+      <span class="career-tag">Science / PCB</span>
+    </div>
+    <div class="career-card">
+      <div class="career-icon">📊</div>
+      <h3>Chartered Accountant</h3>
+      <p>Manage finances, taxes, and audits for companies and individuals.</p>
+      <span class="career-tag">Commerce</span>
+    </div>
+    <div class="career-card">
+      <div class="career-icon">🎨</div>
+      <h3>Graphic Designer</h3>
+      <p>Create visual content for brands, ads, and media. Perfect for creative minds.</p>
+      <span class="career-tag">Arts</span>
+    </div>
+    <div class="career-card">
+      <div class="career-icon">⚖️</div>
+      <h3>Lawyer / Advocate</h3>
+      <p>Represent clients, fight for justice, and interpret laws. For those who love to argue and reason.</p>
+      <span class="career-tag">Arts / Commerce</span>
+    </div>
+    <div class="career-card">
+      <div class="career-icon">🏗️</div>
+      <h3>Civil Engineer</h3>
+      <p>Design and build bridges, roads, and buildings. Great for students who enjoy maths and physics.</p>
+      <span class="career-tag">Science / PCM</span>
+    </div>
+    <div class="career-card">
+      <div class="career-icon">📚</div>
+      <h3>Teacher / Professor</h3>
+      <p>Inspire and educate the next generation. Suitable for all streams.</p>
+      <span class="career-tag">All Streams</span>
+    </div>
+    <div class="career-card">
+      <div class="career-icon">🎬</div>
+      <h3>Film & Media</h3>
+      <p>Work in direction, production, journalism, or content creation. For creative storytellers.</p>
+      <span class="career-tag">Arts</span>
+    </div>
+    <div class="career-card">
+      <div class="career-icon">🌿</div>
+      <h3>Agricultural Scientist</h3>
+      <p>Research crops, soil, and farming techniques to improve food production.</p>
+      <span class="career-tag">Science / PCB</span>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-label" style="color: var(--gold);">Student Stories</div>
+  <div class="section-title">What Students Say</div>
+  <div class="section-sub">Real students who found clarity about their future using our system.</div>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <p>"I had no idea what to do after 12th. This system suggested Software Engineering and now I am studying at a top college. It truly changed my life!"</p>
+      <div class="testi-author">
+        <div class="avatar">A</div>
+        <div>
+          <div class="name">Ananya Desai</div>
+          <div class="role">Engineering Student, Pune</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <p>"My parents wanted me to be a doctor but I was always into drawing. This quiz helped me discover Graphic Design. I now run my own freelance studio!"</p>
+      <div class="testi-author">
+        <div class="avatar">R</div>
+        <div>
+          <div class="name">Rohan Patil</div>
+          <div class="role">Freelance Designer, Mumbai</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <p>"Simple and easy to use. Within 5 minutes I got a list of career options I had never even heard of. This website should be in every school!"</p>
+      <div class="testi-author">
+        <div class="avatar">P</div>
+        <div>
+          <div class="name">Priya Nair</div>
+          <div class="role">Class 12 Student, Kerala</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <p><strong>CareerGuide</strong> — Career Recommendation System for High School Students</p>
+  <p style="margin-top: 8px;">Designed to help every student find their true calling. &copy; 2025</p>
+</footer>
+
+</body>
+</html>
